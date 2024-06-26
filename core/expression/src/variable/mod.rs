@@ -80,7 +80,14 @@ impl<'arena> Variable<'arena> {
             Variable::Null => Value::Null,
             Variable::Bool(b) => Value::Bool(*b),
             Variable::Number(n) => {
-                Value::Number(Number::from_string_unchecked(n.normalize().to_string()))
+                let s = n.normalize().to_string();
+                if n.is_integer() {
+                    let n_int: i64 = s.parse().unwrap();
+                    Value::Number(Number::from(n_int))
+
+                } else {
+                    Value::Number(Number::from_f64(s.parse().unwrap()).unwrap())
+                }
             }
             Variable::String(str) => Value::String(str.to_string()),
             Variable::Array(arr) => Value::Array(arr.iter().map(|i| i.to_value()).collect()),

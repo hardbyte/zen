@@ -17,7 +17,7 @@ once_cell = { workspace = true }
 regex = { workspace = true, optional = true }
 regex-lite = { workspace = true, optional = true }
 serde = { workspace = true }
-serde_json = { workspace = true, features = ["arbitrary_precision"] }
+serde_json = { workspace = true, features = [] }
 strum = { workspace = true }
 strum_macros = { workspace = true }
 thiserror = { workspace = true }
