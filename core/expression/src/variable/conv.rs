@@ -21,15 +21,16 @@ impl<'arena> ToVariable<'arena> for Value {
             Value::Null => Ok(Variable::Null),
             Value::Bool(v) => Ok(Variable::Bool(*v)),
             Value::Number(n) => {
-                match n.as_i64() {
-                    Some(n) => return Ok(Variable::Number(Decimal::from(n))),
-                    None => {
-                        match n.as_f64() {
-                            Some(n) => return Ok(Variable::Number(Decimal::from_f64(n).unwrap())),
-                            None => Err(())
-                        }
-                    }
+                if let Some(n) = n.as_u64() {
+                    return Ok(Variable::Number(Decimal::from(n)));
                 }
+                if let Some(n) = n.as_i64() {
+                    return Ok(Variable::Number(Decimal::from(n)));
+                }
+                if let Some(n) = n.as_f64() {
+                    return Ok(Variable::Number(Decimal::from_f64(n).unwrap()));
+                }
+                Err(())
             },
             Value::String(s) => Ok(Variable::String(arena.alloc_str(s.as_str()))),
             Value::Array(arr) => {
